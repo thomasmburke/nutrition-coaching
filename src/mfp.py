@@ -3,11 +3,15 @@ import logging
 import myfitnesspal
 import os
 
+# Set logger
+logger = logging.getLogger(__name__)
+
 
 def initialize_mfp_client() -> "<class 'myfitnesspal.client.Client'>":
     """
     Summary: Create client for communication with myfitnesspal
     """
+    logger.info('Initializing MFP Client...')
     return myfitnesspal.Client(
         os.getenv('MFP_USERNAME'), password=os.getenv('MFP_PASSWORD'))
 

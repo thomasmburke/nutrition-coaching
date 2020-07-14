@@ -4,12 +4,24 @@ from datetime import datetime as dt
 from datetime import timedelta
 import datetime
 import logging
+import sys
 from mfp import *
 from googlesheets import *
+
+# Add logging config
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%S",
+    stream=sys.stdout)
+
+# Set logger
+logger = logging.getLogger(__name__)
 
 USER = "mcarle"
 # Get yesterday's date
 yesterday = dt.date(dt.now() - timedelta(1))
+logger.info(f"Yeserday's date: {yesterday}")
 # Create client for communication with myfitnesspal
 mfpClient = initialize_mfp_client()
 # Initialize Google Sheets Client
