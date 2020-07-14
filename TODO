@@ -1,5 +1,6 @@
 TODO:
 - Exponential backoff retry logic for mfp web scraping
+    requests.exceptions.SSLError: HTTPSConnectionPool(host='www.myfitnesspal.com', port=443): Max retries exceeded with url: / account/login(Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:1056)')))
 - Put credentials in Secrets Manager or another credential holder instead of as env variables
 - Create a list of clients in a dictionary that can be used to pull creds down
 - Pull historical dataset for any user (Adhoc command)
