@@ -49,7 +49,8 @@ def get_multiple_mfp_dicts(mfpClient: "<class 'myfitnesspal.client.Client'>", da
     mfpDataList = []
     for x in range(numDays):
         # First time in loop we are subtracting 0 days from day
-        currDay = day - timedelta(x)
+        currDay = day - timedelta(x
+                                  )
         mfpDataList.append(get_ordered_mfp_dict(
             mfpClient=mfpClient, day=currDay))
     return mfpDataList
