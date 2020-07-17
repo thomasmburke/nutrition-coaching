@@ -1,3 +1,7 @@
+# environment variables and SA
+src/nutrition-coaching-credentials.json
+src/.env.yaml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
