@@ -5,7 +5,6 @@ TODO:
 - Pull historical dataset for any user (Adhoc command)
 - Rerun a specific day for any user (Adhoc command)
 - Insert dataframe without headers in first row (this should replace a day if already present)
-- Set to run on a cron from somewhere (GCF?)
 - Automate the creation of spreadsheets and worksheets for all of the desired customers and views
     - weekly view
     - total dataset
