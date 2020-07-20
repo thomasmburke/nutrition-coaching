@@ -31,3 +31,15 @@ def get_latest_date_in_sheet(worksheet: "<class 'pygsheets.worksheet.Worksheet'>
         logger.error(
             f"Was not able to convert latestDateString: {latestDateString} to a datetime.date()")
         raise ValueError(str(e))
+
+
+def folder_id_dict(client):
+    """
+    Summary: Get all folders shared with the service account and create a mapping between their name and id
+    """
+    folders = {}
+    meta_list = client.drive.list()
+    for file_meta in meta_list:
+        if file_meta['mimeType'] == 'application/vnd.google-apps.folder':
+            folders[file_meta['name']] = file_meta['id']
+    return folders
