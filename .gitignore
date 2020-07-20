@@ -1,4 +1,5 @@
 # environment variables and SA
+src/test.py
 src/nutrition-coaching-credentials.json
 src/.env.yaml
 
