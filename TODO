@@ -5,6 +5,8 @@ TODO:
 - Pull historical dataset for any user (Adhoc command)
 - Rerun a specific day for any user (Adhoc command)
 - Insert dataframe without headers in first row (this should replace a day if already present)
+- Can I leverage structured logging? ultimately would like to get the funcName with the logging
+    - https://googleapis.dev/python/logging/latest/stdlib-usage.html -> this might be all that is needed
 - Automate the creation of spreadsheets and worksheets for all of the desired customers and views
     - weekly view
     - total dataset
