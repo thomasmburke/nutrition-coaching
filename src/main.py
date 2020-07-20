@@ -10,7 +10,7 @@ from mfp import *
 from googlesheets import *
 
 # To deploy run from src/ dir:
-# gcloud functions deploy pull-mfp-data --entry-point pull_mfp_data --runtime python37 --trigger-topic mfp-1-topic --env-vars-file .env.yaml --project <PROJECT_ID>
+# gcloud functions deploy pull-mfp-data --entry-point pull_mfp_data --runtime python37 --trigger-topic mfp-1-topic --timeout 540s --env-vars-file .env.yaml --project <PROJECT_ID>
 
 
 def pull_mfp_data(event, context):
@@ -19,8 +19,6 @@ def pull_mfp_data(event, context):
          event (dict): Event payload.
          context (google.cloud.functions.Context): Metadata for the event.
     """
-    pubsubMessage = base64.b64decode(event['data']).decode('utf-8')
-    print(pubsubMessage)
     # Add logging config
     logging.basicConfig(
         level=logging.INFO,
@@ -31,17 +29,20 @@ def pull_mfp_data(event, context):
     # Set logger
     logger = logging.getLogger(__name__)
 
-    USER = "mcarle"
+    # Get user from pub/sub message
+    USER = base64.b64decode(event['data']).decode('utf-8')
+    logger.info(f"USER from pub/sub message: {USER}")
     # Get yesterday's date
     yesterday = dt.date(dt.now() - timedelta(1))
     logger.info(f"Yeserday's date: {yesterday}")
     # Create client for communication with myfitnesspal
-    mfpClient = initialize_mfp_client()
+    mfpClient = initialize_mfp_client(USER)
     # Initialize Google Sheets Client
     gsClient = initialize_gsheet_client()
     # Get a reference to the nutrition coaching spreadsheet
-    spreadsheet = gsClient.open_by_key(
-        "1dgwN6dEDscQTOGpIE0tuEt4uvSPb3aQciGuizrxm9iI")
+    spreadsheet = gsClient.open(title=USER)
+    # spreadsheet = gsClient.open_by_key(
+    #     "1dgwN6dEDscQTOGpIE0tuEt4uvSPb3aQciGuizrxm9iI")
     # Select a specific worksheet from the spreadsheet
     worksheet = spreadsheet.worksheet(property='title', value=USER)
     # Get all ordered information for a particular day and numDays before it

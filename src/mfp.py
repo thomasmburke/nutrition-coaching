@@ -8,13 +8,13 @@ from datetime import timedelta
 logger = logging.getLogger(__name__)
 
 
-def initialize_mfp_client() -> "<class 'myfitnesspal.client.Client'>":
+def initialize_mfp_client(user) -> "<class 'myfitnesspal.client.Client'>":
     """
     Summary: Create client for communication with myfitnesspal
     """
-    logger.info('Initializing MFP Client...')
+    logger.info(f'Initializing MFP Client for {user}...')
     return myfitnesspal.Client(
-        os.getenv('MFP_USERNAME'), password=os.getenv('MFP_PASSWORD'))
+        os.getenv(f"{user}_USERNAME"), password=os.getenv(f"{user}_PASSWORD"))
 
 
 def get_ordered_mfp_dict(mfpClient: "<class 'myfitnesspal.client.Client'>", day: "datetime.date") -> "OrderedDict":
