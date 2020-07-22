@@ -1,4 +1,5 @@
 TODO:
+- Move the Nutrition Coaching folder to Margaux's Google Drive. I'm sure customers wouldn't like their data to be shared with my email
 - Exponential backoff retry logic for mfp web scraping
     requests.exceptions.SSLError: HTTPSConnectionPool(host='www.myfitnesspal.com', port=443): Max retries exceeded with url: / account/login(Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:1056)')))
 - Create a list of clients in a dictionary that can be used to pull creds down
