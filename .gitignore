@@ -2,6 +2,7 @@
 src/test.py
 src/nutrition-coaching-credentials.json
 src/.env.yaml
+env_ops.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
