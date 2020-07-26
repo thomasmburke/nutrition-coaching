@@ -5,6 +5,7 @@ from googlesheets import initialize_gsheet_client
 import argparse
 import pygsheets
 import re
+from env_ops import set_client_env_vars
 
 
 def add_new_client(user: "str", email: "str") -> "pygsheets.Spreadsheet":
@@ -56,14 +57,18 @@ class EmailType(object):
 def main():
     # Gather args and validate them
     parser = argparse.ArgumentParser()
-    parser.add_argument('--user')
-    parser.add_argument('--email', type=EmailType('RFC5322'))
+    parser.add_argument('--user', required=True)
+    parser.add_argument('--email', type=EmailType('RFC5322'), required=True)
+    parser.add_argument('--username', required=True)
+    parser.add_argument('--password', required=True)
     args = parser.parse_args()
     USER = args.user.upper()
     EMAIL = args.email
 
     # Set env vars
     # This should call function from another file that will be in the .gitignore
+    set_client_env_vars(user=USER, username=args.username,
+                        password=args.password)
 
     # redeploy function
 
@@ -74,5 +79,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # usage: python3 new_client.py --user tburke --email info@example.com
+    # usage: python3 new_client.py --user tburke --email info@example.com --username tmoney884 --password p@$$W0rD!
     main()
