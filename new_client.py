@@ -2,10 +2,10 @@ import sys
 import os
 sys.path.insert(0, 'src')
 from googlesheets import initialize_gsheet_client
+from gcloud_commands import deploy_gcf, deploy_scheduler
 import argparse
 import pygsheets
 import re
-import subprocess
 
 
 def add_new_client(user: "str", email: "str") -> "pygsheets.Spreadsheet":
@@ -31,12 +31,6 @@ def set_client_env_vars(user: "str", username: "str", password: "str"):
         envFile.write(
             f"{user}_USERNAME: {username}\n{user}_PASSWORD: {password}\n")
     return
-
-
-def deploy_gcf():
-    filePath = os.path.dirname(os.path.realpath(__file__))
-    deployPath = os.path.join(filePath, "src/")
-    return subprocess.call(args=f"gcloud functions deploy pull-mfp-data --entry-point pull_mfp_data --runtime python37 --trigger-topic mfp-1-topic --timeout 540s --env-vars-file .env.yaml --project {os.getenv('NUTRITION_GCP_PROJECT_ID')}".split(" "), cwd=deployPath)
 
 
 class EmailType(object):
@@ -83,6 +77,8 @@ def main():
     deploy_gcf()
 
     # create new scheduler job
+    deploy_scheduler(user=USER)
+    # gcloud scheduler jobs create pubsub JOB-NAME --schedule "30 2 * * *" --topic mfp-1-topic --message-body "USER" --time-zone "America/Los_Angeles" --description "job to pull mfp data for USER" --project <PROJECT-ID>
 
     # Create, format and share spreadsheet
     # add_new_client(user=USER, email=EMAIL)
