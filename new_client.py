@@ -2,7 +2,6 @@ import sys
 import os
 sys.path.insert(0, 'src')
 from googlesheets import initialize_gsheet_client
-from env_ops import set_client_env_vars
 import argparse
 import pygsheets
 import re
@@ -25,6 +24,13 @@ def add_new_client(user: "str", email: "str") -> "pygsheets.Spreadsheet":
     spreadsheet.share(email_or_domain=email, role='reader', type='user',
                       emailMessage="Welcome to Margaux Carle's nutrition coaching program!\n\nWe will use this Google Sheet to track your nutrition info you provide in MyFitnessPal.")
     return spreadsheet
+
+
+def set_client_env_vars(user: "str", username: "str", password: "str"):
+    with open("src/.env.yaml", "a") as envFile:
+        envFile.write(
+            f"{user}_USERNAME: {username}\n{user}_PASSWORD: {password}\n")
+    return
 
 
 def deploy_gcf():
