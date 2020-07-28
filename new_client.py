@@ -19,11 +19,28 @@ def add_new_client(user: "str", email: "str") -> "pygsheets.Spreadsheet":
     spreadsheet.sheet1.title = f"{user}_WEEKLY"
     spreadsheet.add_worksheet(title=f"{user}_NUTRITION_HISTORY")
     # TODO: Add column headers to the nutrition history view
-
+    # add_headers(gsClient=gsClient, newWorksheet=spreadsheet.worksheet(property = 'title', value = f"{user}_NUTRITION_HISTORY"))
     # Share the spreadsheet with the new user's email
     spreadsheet.share(email_or_domain=email, role='reader', type='user',
                       emailMessage="Welcome to Margaux Carle's nutrition coaching program!\n\nWe will use this Google Sheet to track your nutrition info you provide in MyFitnessPal.")
     return spreadsheet
+
+
+def add_headers(gsClient: "<class 'pygsheets.client.Client'>", newWorksheet: "<class 'pygsheets.worksheet.Worksheet'>") -> "<class 'pygsheets.worksheet.Worksheet'>":
+    """
+    Summary: Copy headers from Margaux's worksheet and add them to the new worksheet
+    """
+    # Get a reference to Margaux's worksheet
+    margauxSpreadsheet = gsClient.open(title="MCARLE")
+    # Get a reference to the MCARLE nutrition history worksheet
+    margauxWorksheet = margauxSpreadsheet.worksheet(
+        property='title', value="MCARLE_NUTRITION_HISTORY")
+    # Copy top row of headers
+    headerDf = margauxWorksheet.get_as_df(
+        start='A1', end=(1, margauxWorksheet.cols))
+    # Set headers in new worksheet
+    newWorksheet.set_dataframe(headerDf, 'A1')
+    return newWorksheet
 
 
 def set_client_env_vars(user: "str", username: "str", password: "str"):
