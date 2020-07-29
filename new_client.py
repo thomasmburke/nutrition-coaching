@@ -18,8 +18,9 @@ def add_new_client(user: "str", email: "str") -> "pygsheets.Spreadsheet":
     # Add expected worksheets
     spreadsheet.sheet1.title = f"{user}_WEEKLY"
     spreadsheet.add_worksheet(title=f"{user}_NUTRITION_HISTORY")
-    # TODO: Add column headers to the nutrition history view
-    # add_headers(gsClient=gsClient, newWorksheet=spreadsheet.worksheet(property = 'title', value = f"{user}_NUTRITION_HISTORY"))
+    add_headers(gsClient=gsClient, newWorksheet=spreadsheet.worksheet(
+        property='title', value=f"{user}_NUTRITION_HISTORY"))
+    # TODO: Maybe I should try pulling some initial data for these users or create a separate flow that does?
     # Share the spreadsheet with the new user's email
     spreadsheet.share(email_or_domain=email, role='reader', type='user',
                       emailMessage="Welcome to Margaux Carle's nutrition coaching program!\n\nWe will use this Google Sheet to track your nutrition info you provide in MyFitnessPal.")
@@ -98,7 +99,7 @@ def main():
     # gcloud scheduler jobs create pubsub JOB-NAME --schedule "30 2 * * *" --topic mfp-1-topic --message-body "USER" --time-zone "America/Los_Angeles" --description "job to pull mfp data for USER" --project <PROJECT-ID>
 
     # Create, format and share spreadsheet
-    # add_new_client(user=USER, email=EMAIL)
+    add_new_client(user=USER, email=EMAIL)
 
 
 if __name__ == '__main__':
