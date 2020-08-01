@@ -15,3 +15,17 @@ TODO:
     - 6 months
     - 1 year
     - all time
+- Make Spreadsheet look prettier
+    - spacing
+    - colors
+
+Nice to haves:
+colors:
+Protein & Carbs:
+    +- 5 - red
+    +- 3-4 - yellow
+    +- 2 - green
+Fats:
+    +- 3 - red
+    +- 2 - yellow
+    +- 1 - green
