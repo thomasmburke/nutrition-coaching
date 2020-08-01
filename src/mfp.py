@@ -3,6 +3,8 @@ import logging
 import myfitnesspal
 import os
 from datetime import timedelta
+from time import sleep
+import random
 
 # Set logger
 logger = logging.getLogger(__name__)
@@ -23,9 +25,24 @@ def get_ordered_mfp_dict(mfpClient: "<class 'myfitnesspal.client.Client'>", day:
     """
     mfpData = OrderedDict()
     # Add the day the data is associated with
-    dayData = mfpClient.get_date(day)
+    # Surround requests with exponential backoff in case of issues with mfp data request
+    for n in range(0, 10):
+        try:
+            dayData = mfpClient.get_date(day)
+            weight = mfpClient.get_measurements('Weight', day)
+            break
+        except Exception as e:
+            if(n == 9):
+                logger.error(
+                    'exponential timeout did not resolve the issue')
+                # Send SNS message
+                raise ValueError(
+                    f'{mfpClient.effective_username} had an MFP data pull issue for {day} yielding the following error={str(e)}')
+            else:
+                sleep((2 ** n) + random.random())  # exponential backoff
+                logger.info(f'exponential backoff retry {n}')
+
     dayTotals = dayData.totals
-    weight = mfpClient.get_measurements('Weight', day)
     meals = dayData.meals
     # Add values in order to the mfpData dict
     mfpData['Date'] = day
