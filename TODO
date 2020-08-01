@@ -1,8 +1,17 @@
 TODO:
 - Exponential backoff retry logic for mfp web scraping
     requests.exceptions.SSLError: HTTPSConnectionPool(host='www.myfitnesspal.com', port=443): Max retries exceeded with url: / account/login(Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:1056)')))
-- Create a list of clients in a dictionary that can be used to pull creds down
 - Pull historical dataset for any user (Adhoc command)
 - Rerun a specific day for any user (Adhoc command)
+- email alerts on job failures with error message
 - Can I leverage structured logging? ultimately would like to get the funcName with the logging
     - https://googleapis.dev/python/logging/latest/stdlib-usage.html -> this might be all that is needed
+- Add MACROS section to bottom of weekly view so Margaux knows where to write
+- Macro history worksheet that captures any change in macros and logs it with the Date they were changed
+- Weight History graph
+    - 1 week
+    - 1 month
+    - 3 months
+    - 6 months
+    - 1 year
+    - all time
