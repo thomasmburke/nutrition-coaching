@@ -1,7 +1,7 @@
 import sys
 import os
 sys.path.insert(0, 'src')
-from googlesheets import *
+from googlesheets import add_new_client
 from gcloud_commands import deploy_gcf, deploy_scheduler
 import argparse
 import re
