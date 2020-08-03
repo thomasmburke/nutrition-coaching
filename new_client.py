@@ -1,50 +1,25 @@
 import sys
 import os
 sys.path.insert(0, 'src')
-from googlesheets import initialize_gsheet_client
+from googlesheets import *
 from gcloud_commands import deploy_gcf, deploy_scheduler
 import argparse
-import pygsheets
 import re
+import logging
 
+# Add logging config
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%S",
+    stream=sys.stdout)
 
-def add_new_client(user: "str", email: "str") -> "pygsheets.Spreadsheet":
-    gsClient = initialize_gsheet_client()
-    # Create a new spreadsheet for the new user
-    # Folder in Margaux's Drive
-    gsClient.create(title=user, folder="1ayQ9ERDdEdIgiG8AWHrJ7lbtiJtCLRdk")
-    # Get a reference to the newly created spreadsheet
-    spreadsheet = gsClient.open(title=user)
-    # Add expected worksheets
-    spreadsheet.sheet1.title = f"{user}_WEEKLY"
-    spreadsheet.add_worksheet(title=f"{user}_NUTRITION_HISTORY")
-    add_headers(gsClient=gsClient, newWorksheet=spreadsheet.worksheet(
-        property='title', value=f"{user}_NUTRITION_HISTORY"))
-    # TODO: Maybe I should try pulling some initial data for these users or create a separate flow that does?
-    # Share the spreadsheet with the new user's email
-    spreadsheet.share(email_or_domain=email, role='reader', type='user',
-                      emailMessage="Welcome to Margaux Carle's nutrition coaching program!\n\nWe will use this Google Sheet to track your nutrition info you provide in MyFitnessPal.")
-    return spreadsheet
-
-
-def add_headers(gsClient: "<class 'pygsheets.client.Client'>", newWorksheet: "<class 'pygsheets.worksheet.Worksheet'>") -> "<class 'pygsheets.worksheet.Worksheet'>":
-    """
-    Summary: Copy headers from Margaux's worksheet and add them to the new worksheet
-    """
-    # Get a reference to Margaux's worksheet
-    margauxSpreadsheet = gsClient.open(title="MCARLE")
-    # Get a reference to the MCARLE nutrition history worksheet
-    margauxWorksheet = margauxSpreadsheet.worksheet(
-        property='title', value="MCARLE_NUTRITION_HISTORY")
-    # Copy top row of headers
-    headerDf = margauxWorksheet.get_as_df(
-        start='A1', end=(1, margauxWorksheet.cols))
-    # Set headers in new worksheet
-    newWorksheet.set_dataframe(headerDf, 'A1')
-    return newWorksheet
+# Set logger
+logger = logging.getLogger(__name__)
 
 
 def set_client_env_vars(user: "str", username: "str", password: "str"):
+    logger.info('saving env vars...')
     with open("src/.env.yaml", "a") as envFile:
         envFile.write(
             f"{user}_USERNAME: {username}\n{user}_PASSWORD: {password}\n")
