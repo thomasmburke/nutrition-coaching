@@ -55,13 +55,13 @@ def add_new_client(user: "str", email: "str") -> "pygsheets.Spreadsheet":
         property='title', value=f"{user}_WEEKLY"))
     add_headers(gsClient=gsClient, newWorksheet=spreadsheet.worksheet(
         property='title', value=f"{user}_NUTRITION_HISTORY"))
+    # Style Weekly worksheet
+    style_weekly_worksheet(worksheet=spreadsheet.worksheet(
+        property='title', value=f"{user}_WEEKLY"))
     # Style column headers on both nutrition worksheets
     style_col_headers(worksheet=spreadsheet.worksheet(
         property='title', value=f"{user}_NUTRITION_HISTORY"))
     style_col_headers(worksheet=spreadsheet.worksheet(
-        property='title', value=f"{user}_WEEKLY"))
-    # Style Weekly worksheet
-    style_weekly_worksheet(worksheet=spreadsheet.worksheet(
         property='title', value=f"{user}_WEEKLY"))
     # Share the spreadsheet with the new user's email
     spreadsheet.share(email_or_domain=email, role='reader', type='user',
