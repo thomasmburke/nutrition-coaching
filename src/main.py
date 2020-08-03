@@ -88,6 +88,9 @@ def pull_mfp_data(event: "dict", context: "google.cloud.functions.Context"):
     # Initialize Google Sheets Client
     gsClient = initialize_gsheet_client()
 
+    # Copy target macro if it has changed
+    # TODO: Copy taget macros
+
     # Daily update from MFP
     daily_mfp_data_update(user=USER, mfpClient=mfpClient, gsClient=gsClient)
 
