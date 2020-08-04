@@ -87,6 +87,19 @@ def add_headers(gsClient: "<class 'pygsheets.client.Client'>", newWorksheet: "<c
     return newWorksheet
 
 
+def add_target_macros(worksheet: "<class 'pygsheets.worksheet.Worksheet'>") -> "<class 'pygsheets.DataRange' >":
+    """
+    Summary: Adds target macro section to worksheet. (assumes it is the weekly worksheet)
+    """
+    logger.info('adding target macro section...')
+    targetMacroValueMatrix = [['TARGET MACROS', '', '', '', ''], ['', 'calories', 'protein', 'carbohydrates', 'fat'], [
+        'Training', '', '', '', ''], ['Refeed', '', '', '', ''], ['3rd type?', '', '', '', '']]
+    targetMacroRange = pygsheets.datarange.DataRange(
+        start='A10', end='E14', worksheet=worksheet, name='TARGET_MACROS', data=targetMacroValueMatrix)
+    targetMacroRange.update_values(targetMacroRange.cells)
+    return targetMacroRange
+
+
 def style_col_headers(worksheet: "<class 'pygsheets.worksheet.Worksheet'>") -> "<class 'pygsheets.Cell' >":
     """
     Summary: Styles column headers for a particular nutrition worksheet.
