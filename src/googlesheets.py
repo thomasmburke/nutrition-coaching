@@ -64,6 +64,7 @@ def add_new_client(user: "str", email: "str") -> "pygsheets.Spreadsheet":
     style_col_headers(worksheet=spreadsheet.worksheet(
         property='title', value=f"{user}_WEEKLY"))
     # Share the spreadsheet with the new user's email
+    logger.info(f"Sharing Google sheet with {email}")
     spreadsheet.share(email_or_domain=email, role='reader', type='user',
                       emailMessage="Welcome to Margaux Carle's nutrition coaching program!\n\nWe will use this Google Sheet to track your nutrition info you provide in MyFitnessPal.")
     return spreadsheet
@@ -93,7 +94,7 @@ def add_target_macros(worksheet: "<class 'pygsheets.worksheet.Worksheet'>") -> "
     """
     logger.info('adding target macro section...')
     targetMacroValueMatrix = [['TARGET MACROS', '', '', '', ''], ['', 'calories', 'protein', 'carbohydrates', 'fat'], [
-        'Training', '', '', '', ''], ['Refeed', '', '', '', ''], ['3rd type?', '', '', '', '']]
+        'Macros', '', '', '', '']]
     targetMacroRange = pygsheets.datarange.DataRange(
         start='A10', end='E14', worksheet=worksheet, name='TARGET_MACROS', data=targetMacroValueMatrix)
     targetMacroRange.update_values(targetMacroRange.cells)
