@@ -19,7 +19,7 @@ def daily_mfp_data_update(user: "str", mfpClient: "<class 'myfitnesspal.client.C
     """
     # Get yesterday's date
     yesterday = dt.date(dt.now() - timedelta(1))
-    logger.info(f"Yeserday's date: {yesterday}")
+    logger.info(f"Yesterday's date: {yesterday}")
     # Get a reference to the nutrition coaching spreadsheet
     spreadsheet = gsClient.open(title=user)
     # Select a specific worksheet from the spreadsheet
@@ -32,15 +32,17 @@ def daily_mfp_data_update(user: "str", mfpClient: "<class 'myfitnesspal.client.C
     mfpDf = pd.DataFrame(mfpData, columns=mfpData[0].keys())
     logger.info(mfpDf)
     latestDate = get_latest_date_in_sheet(worksheet=nutritionHistoryWorksheet)
-    # If we already have data for the day we are pulling then we should just overwrite it o/w we need to make space for the new row
-    if (latestDate < yesterday):
-        logger.info(
-            f"yesterday: {yesterday} is < the latest date in the worksheet: {latestDate}, therefore we will insert a row.")
-        # Inserts a row underneath the column headers
-        nutritionHistoryWorksheet.insert_rows(row=1, number=1, values=None)
-    else:
-        logger.info(
-            f"yesterday: {yesterday} is not < the latest date in the worksheet: {latestDate}, therefore we will not insert a row.")
+    # New clients will not have a latest date so we don't want to compare dates
+    if latestDate is not None:
+        # If we already have data for the day we are pulling then we should just overwrite it o/w we need to make space for the new row
+        if (latestDate < yesterday):
+            logger.info(
+                f"yesterday: {yesterday} is < the latest date in the worksheet: {latestDate}, therefore we will insert a row.")
+            # Inserts a row underneath the column headers
+            nutritionHistoryWorksheet.insert_rows(row=1, number=1, values=None)
+        else:
+            logger.info(
+                f"yesterday: {yesterday} is not < the latest date in the worksheet: {latestDate}, therefore we will not insert a row.")
     # Inserts dailyTotalsDf in worksheet starting from A2
     nutritionHistoryWorksheet.set_dataframe(mfpDf, 'A2', copy_head=False)
     return mfpDf

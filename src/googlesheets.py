@@ -23,6 +23,10 @@ def get_latest_date_in_sheet(worksheet: "<class 'pygsheets.worksheet.Worksheet'>
     Summary: Gets the latest date for a given worksheet. Assumes that the latest date is the first in the date column
     """
     latestDateString = worksheet.get_value('A2')
+    if not latestDateString:
+        logger.warning(
+            'No latest date for a new client that does not have data yet')
+        return None
     try:
         latestDate = dt.date(dt.strptime(latestDateString, "%Y-%m-%d"))
         logger.info(f"latest date in sheet: {latestDate}")
