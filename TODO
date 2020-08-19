@@ -2,6 +2,13 @@ Complete, but keeping for reference:
 - Exponential backoff retry logic for mfp web scraping
     requests.exceptions.SSLError: HTTPSConnectionPool(host='www.myfitnesspal.com', port=443): Max retries exceeded with url: / account/login(Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:1056)')))
 
+Errors:
+- myfitnesspal.exceptions.MyfitnesspalRequestFailed: Unable to fetch authentication token from MyFitnessPal: status code: 500
+- Unable to fetch user metadata; this may cause Myfitnesspal to behave incorrectly if you have logged-in with your e-mail address rather than your basic username; status 400.
+- File "/Users/tburke/Desktop/environments/nutrition-coaching/lib/python3.7/site-packages/myfitnesspal/client.py", line 164, in _get_user_metadata
+    return result.json()["item"]
+KeyError: 'item'
+
 TODO:
 - Pull historical dataset for any user (Adhoc command)
 - Rerun a specific day for any user (Adhoc command)
