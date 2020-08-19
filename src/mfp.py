@@ -14,9 +14,22 @@ def initialize_mfp_client(user: "str") -> "<class 'myfitnesspal.client.Client'>"
     """
     Summary: Create client for communication with myfitnesspal
     """
-    logger.info(f'Initializing MFP Client for {user}...')
-    return myfitnesspal.Client(
-        os.getenv(f"{user}_USERNAME"), password=os.getenv(f"{user}_PASSWORD"))
+    for n in range(0, 9):
+        try:
+            logger.info(f'Initializing MFP Client for {user}...')
+            mfpClient = myfitnesspal.Client(
+                os.getenv(f"{user}_USERNAME"), password=os.getenv(f"{user}_PASSWORD"))
+            return mfpClient
+        except Exception as e:
+            if(n == 8):
+                logger.error(
+                    'exponential timeout did not resolve the issue')
+                # Send SNS message
+                raise ValueError(
+                    f'{user} was unsuccessful in initializing their mfpClient yielding the following error={str(e)}')
+            else:
+                sleep((2 ** n) + random.random())  # exponential backoff
+                logger.info(f'exponential backoff retry {n}')
 
 
 def get_ordered_mfp_dict(mfpClient: "<class 'myfitnesspal.client.Client'>", day: "datetime.date") -> "OrderedDict":
@@ -26,13 +39,13 @@ def get_ordered_mfp_dict(mfpClient: "<class 'myfitnesspal.client.Client'>", day:
     mfpData = OrderedDict()
     # Add the day the data is associated with
     # Surround requests with exponential backoff in case of issues with mfp data request
-    for n in range(0, 10):
+    for n in range(0, 9):
         try:
             dayData = mfpClient.get_date(day)
             weight = mfpClient.get_measurements('Weight', day)
             break
         except Exception as e:
-            if(n == 9):
+            if(n == 8):
                 logger.error(
                     'exponential timeout did not resolve the issue')
                 # Send SNS message
