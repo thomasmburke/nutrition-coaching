@@ -25,3 +25,7 @@ def deploy_scheduler(user: "str") -> "int":
     cmd = ['gcloud', 'scheduler', 'jobs', 'create', 'pubsub', f"{user}-JOB", '--schedule', '30 2 * * *', '--topic', 'mfp-1-topic', '--message-body', user,
            '--time-zone', 'America/Los_Angeles', '--description', f"job to pull mfp data for {user}", '--project', os.getenv('NUTRITION_GCP_PROJECT_ID')]
     return subprocess.call(cmd)
+
+
+if __name__ == '__main__':
+    deploy_gcf()
